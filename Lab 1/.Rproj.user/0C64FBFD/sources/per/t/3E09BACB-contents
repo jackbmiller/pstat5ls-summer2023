@@ -1,0 +1,75 @@
+---
+title: "PSTAT 5LS Summer 2023" 
+author: "Your Name Here"
+date: "June 29 and July 6, 2023"
+output: pdf_document
+---
+
+# Lab Notes
+
+Use this place to take any notes during your lab section.
+
+- Type any notes here
+- Add new notes by using the dash `-` to create a list
+
+# Lab Code
+
+You can follow along with the TA's tutorial by running the chunks below. 
+
+```{r tryIt1, error = T}
+# Run this code chunk to print the phrase "Hello World!" to the screen
+print("Hello world!")
+```
+
+```{r tryIt2, error = T}
+# Run this code chunk to compute what 5 times 7 is
+5 * 7
+```
+
+```{r tryIt3, error = T}
+# Run this code chunk to compute what 36 divided by 6 is, and assign it to x
+x <- 36 / 6
+```
+
+```{r tryIt4, error = T}
+# Run this code chunk to see the value of x that R has stored
+x
+```
+
+```{r tryIt5, error = T}
+# Run this code chunk to see what happens if you use X (capitalized) instead
+X
+```
+
+```{r tryIt6, error = T}
+# Run this code chunk to load the penguins data set into the environment
+penguins <- read.csv("penguins.csv")
+```
+
+```{r tryIt7, error = T}
+# Run this code chunk to peek at the penguins data set
+head(penguins)
+```
+
+```{r tryIt8, error = T}
+# Run this code chunk to examine the structure of the penguins data set
+str(penguins)
+```
+
+# Code Cheat Sheet
+
+## `<-`
+- Assigns a value to a name
+- `name <- value`
+
+## `read.csv(file, stringsAsFactors = TRUE)`
+- `file` is the name of the file from which data are to be read
+- `stringsAsFactors` should generally be set to `TRUE` (all caps): this determines how text-like data in a CSV file is interpreted by R.
+
+## `head(x, n)`
+- `x` is a data.frame
+- `n` is the number of rows to print
+
+## `str(object)`
+- `object` is the R object about which you want to have some information (i.e., see the `str`ucture of).
+
