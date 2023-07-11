@@ -1,0 +1,269 @@
+---
+title: "PSTAT 5LS Lab 4" 
+author: "YOUR NAME HERE"
+date: "July 13, 2023"
+output:
+  beamer_presentation:
+    theme: AnnArbor
+    fig_crop: false
+    fig_width: 6
+    fig_height: 4
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(stats250sbi)
+```
+
+# Announcements & Recap
+
+## Announcements
+Insert any relevant announcements, important dates, things you want to remember here.
+
+For instance, you might have them remember the date and time that homework and lab are due, and remind them that the deadlines are firm.
+
+## Recap
+Write down some common errors that you spotted while you graded/had office hours for this week's lab and/or homework.
+
+# Learning Objectives
+
+## R Learning Objectives
+1. Learn how to visualize the normal distribution using `plot_norm()`
+1. Learn how to use `pnorm()` to find probabilities under the normal curve
+1. Learn how to use `qnorm()` to find values of a normally distributed variable with specified probability to the left or the right
+
+
+## Statistical Learning Objectives
+1. Understand how area under the normal curve relates to probability
+1. Understand how to move between probabilities and quantiles of the normal distribution
+
+## Functions covered in this lab
+1. `plot_norm()`
+1. `pnorm()`
+1. `qnorm()`
+
+# Lab Tutorial
+
+## Normal Distributions
+A "distribution" refers to the possible values a random variable can take as well as the probability that it takes those values. It is commonly used to approximate all sorts of things in nature and life.
+
+It takes two numbers to completely describe a normal distribution: the **mean** and **standard deviation**. 
+
+We denote a normal distribution by N($\mu$, $\sigma$), where $\mu$ is the population mean and $\sigma$ is the population standard deviation. 
+
+Normal distributions are all bell-shaped, unimodal, and symmetric about their means, regardless of the values of the mean ($\mu$) and the standard deviation ($\sigma$). 
+
+The mean $\mu$ specifies the *center* of the distribution. The standard deviation $\sigma$ specifies the *variability* of the distribution (meaning, how narrow or wide is it?).
+
+## The Standard Normal Distribution
+Early statisticians did not have the technology we have at our disposal to find probabilities for variables that have normal distributions. They found probabilities under the normal curve by standardizing their variables as follows.
+
+If a variable $X$ has a N($\mu$, $\sigma$) distribution, then the variable 
+$$z = \frac{x - \mu}{\sigma}$$
+has the **standard normal** N(0, 1) distribution.
+
+Then they used a standard normal table to estimate probabilities.
+
+## The Standard Normal Distribution
+Let's take a look at the standard normal distribution.
+
+```{r normaldist, echo = FALSE}
+plot_norm(mean = 0, sd = 1)
+```
+
+## Visualizing a Normal Distribution with `plot_norm()`
+The `stats250sbi` package includes the `plot_norm()` function to help you create a graphical display of a normal distribution. You will need to send the function the following arguments:
+
+- `mean`: the mean of the normal distribution you'd like to draw ($\mu$)
+- `sd`: the standard deviation or standard error of the normal distribution you'd like to draw ($\sigma$ or $\sqrt{\frac{p_0(1-p_0)}{n}}$, respectively)
+- `shadeValues` (optional): either a number or a vector of two numbers (using `c()`) that are the boundaries of the region you'd like to shade.
+- `direction`: where to shade (`"less"`, `"greater"`, `"between"`, or `"beyond"`)
+- `col.shade`: the color to use when shading
+- any other graphical parameters you want to use to control the appearance of the plot (like `main`, etc.)
+
+## Example: Pelican Wingspans
+Recall from lecture that the distribution of wingspans in the population of California brown pelicans can be described by a normal distribution with mean 6.5 feet and standard deviation 0.5 feet.
+
+## Example: Pelican Wingspans, part a
+Let's recreate the images from the first three parts of the pelican example from the lecture notes.
+
+In part a, we are interested in the probability that a randomly selected California brown pelican will have a wingspan of at most 5.75 feet. The visualization using `plot_norm()` is
+
+```{r normalDistCode_a, eval = FALSE}
+plot_norm(mean = 6.5, 
+          sd = 0.5, 
+          shadeValues = 5.75, 
+          direction = "less", 
+          col.shade = "cornflowerblue")
+```
+
+## Example: Pelican Wingspans, part a
+```{r normalDistGraph_a, echo = FALSE}
+plot_norm(mean = 6.5, 
+          sd = 0.5, 
+          shadeValues = 5.75, 
+          direction = "less", 
+          col.shade = "cornflowerblue")
+```
+
+## Example: Pelican Wingspans, part b
+In part b, we are interested in the probability that a randomly selected California brown pelican will have a wingspan of at least 7.75 feet. The visualization using `plot_norm()` is
+
+```{r normalDistCode_b, eval = FALSE}
+plot_norm(mean = 6.5, 
+          sd = 0.5, 
+          shadeValues = 7.75, 
+          direction = "greater", 
+          col.shade = "cornflowerblue")
+```
+
+## Example: Pelican Wingspans, part b
+```{r normalDistGraph_b, echo = FALSE}
+plot_norm(mean = 6.5, 
+          sd = 0.5, 
+          shadeValues = 7.75, 
+          direction = "greater",  
+          col.shade = "cornflowerblue")
+```
+
+## Example: Pelican Wingspans, part c
+In part c, we are interested in the probability that a randomly selected California brown pelican will have a wingspan between 5.5 and 7 feet. The visualization using `plot_norm()` is
+
+```{r normalDistCode_c, eval = FALSE}
+plot_norm(mean = 6.5, 
+          sd = 0.5, 
+          shadeValues = c(5.5, 7), 
+          direction = "between", 
+          col.shade = "cornflowerblue")
+```
+
+## Example: Pelican Wingspans, part c
+```{r normalDistGraph_c, echo = FALSE}
+plot_norm(mean = 6.5, 
+          sd = 0.5, 
+          shadeValues = c(5.5, 7), 
+          direction = "between",  
+          col.shade = "cornflowerblue")
+```
+
+## Finding Probabilities with the `pnorm()` Function
+The `pnorm()` function gives us a way to compute probabilities when a variable has a normal distribution. The arguments you need to send to `pnorm()`:
+
+- `q`: the quantile (value on the axis) for the normal distribution
+- `mean`: the mean of the normal distribution ($\mu$)
+- `sd`: the standard deviation of the normal distribution ($\sigma$)
+- `lower.tail`: set to \textcolor{blue}{`TRUE`} initially, signifying that R will compute the probability **to the \textcolor{blue}{LEFT}** of `q`; if you would like R to compute the probability *to the \textcolor{red}{right}* of `q`, set `lower.tail` to \textcolor{red}{FALSE}
+
+## Example: Cholesterol in Middle-aged Men
+The blood cholesterol levels of men age 55 to 64 are approximately normal, with mean 222 milligrams per deciliter (mg/dl) and standard deviation 37 mg/dl.
+
+What percent of middle-aged men have high cholesterol (levels above 240 mg/dl)?
+
+## Example: Cholesterol in Middle-aged Men
+
+```{r normalPlotChol1, echo = FALSE}
+plot_norm(mean = 222, 
+          sd = 37, 
+          shadeValues = 240, 
+          direction = "greater",  
+          col.shade = "cornflowerblue")
+```
+
+## Example: Cholesterol in Middle-aged Men
+What percent of middle-aged men have high cholesterol (levels above 240 mg/dl)?
+
+```{r normalProbChol1, echo = TRUE}
+pnorm(q = 240, 
+      mean = 222, 
+      sd = 37, 
+      lower.tail = FALSE)
+```
+
+## Example: Cholesterol in Middle-aged Men
+The blood cholesterol levels of men age 55 to 64 are approximately normal, with mean 222 milligrams per deciliter (mg/dl) and standard deviation 37 mg/dl.
+
+What percent have elevated cholesterol (between 200 and 240 mg/dl)?
+
+## Example: Cholesterol in Middle-aged Men
+
+```{r normalPlotChol2, echo = FALSE}
+plot_norm(mean = 222, 
+          sd = 37, 
+          shadeValues = c(200, 240), 
+          direction = "between",  
+          col.shade = "cornflowerblue")
+```
+
+## Example: Cholesterol in Middle-aged Men
+What percent have elevated cholesterol (between 200 and 240 mg/dl)?
+
+```{r normalProbChol2, echo = TRUE}
+pnorm(q = 240, mean = 222, sd = 37, lower.tail = FALSE) - 
+  pnorm(q = 200, mean = 222, sd = 37, lower.tail = FALSE)
+```
+
+## Example: Cholesterol in Middle-aged Men
+The blood cholesterol levels of men age 55 to 64 are approximately normal, with mean 222 milligrams per deciliter (mg/dl) and standard deviation 37 mg/dl.
+
+Men in the 95th percentile have blood cholesterol levels of what value?
+
+Um, wait. We can't do this with `pnorm()`!
+
+## Finding Values of the Variable with the `qnorm()` Function
+The `qnorm()` function gives us a way to find the values of a normally distributed variable when you are given a probability. The arguments you need to send to `qnorm()`:
+
+- `p`: the probability or area under the curve you want to find an x-axis value for
+- `mean`: the mean of the normal distribution, defaults to 0
+- `sd`: the standard deviation of the normal distribution, defaults to 1
+- `lower.tail`: determines whether `qnorm()` finds the value of the variable with area `p` to its left or right. If `lower.tail` is set to \textcolor{blue}{`TRUE`} (the default), the area `p` is to the \textcolor{blue}{LEFT}. If `lower.tail` is set to \textcolor{red}{`FALSE`}, the area `p` is to the \textcolor{red}{RIGHT}.
+
+## Example: Cholesterol in Middle-aged Men
+The blood cholesterol levels of men age 55 to 64 are approximately normal, with mean 222 milligrams per deciliter (mg/dl) and standard deviation 37 mg/dl.
+
+Men in the 95th percentile have blood cholesterol levels of what value?
+
+Um, wait. We can't do this with `pnorm()`!
+
+## Example: Cholesterol in Middle-aged Men
+We can do this one of two ways: 
+
+```{r qnormChol1, eval = FALSE}
+qnorm(p = 0.95, 
+      mean = 222, 
+      sd = 37, 
+      lower.tail = TRUE)
+```
+
+```{r qnormChol2, eval = FALSE}
+qnorm(p = 0.05, 
+      mean = 222, 
+      sd = 37, 
+      lower.tail = FALSE)
+```
+
+## Example: Cholesterol in Middle-aged Men
+Hopefully it doesn't surprise you that the probabilities are the same: 
+
+```{r qnormChol1b, echo = TRUE}
+qnorm(p = 0.95, 
+      mean = 222, 
+      sd = 37, 
+      lower.tail = TRUE)
+```
+
+```{r qnormChol2b, echo = TRUE}
+qnorm(p = 0.05, 
+      mean = 222, 
+      sd = 37, 
+      lower.tail = FALSE)
+```
+
+# Questions
+
+## What Questions Do You Have?
+
+# Lab 4 Report
+
+## Work on Lab 4 Report
+It's time to work on your Lab 4 report!

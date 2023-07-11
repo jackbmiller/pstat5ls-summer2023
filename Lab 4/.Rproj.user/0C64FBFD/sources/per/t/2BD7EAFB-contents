@@ -1,0 +1,97 @@
+---
+title: "PSTAT 5LS Lab 4 Report"
+author: "YOUR NAME GOES HERE - KEEP THE QUOTES"
+date: "TODAY'S DATE GOES HERE - KEEP THE QUOTES"
+output: pdf_document
+
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(stats250sbi)
+```
+
+# Introduction
+
+In this lab report, you will use `pnorm()` and `qnorm()` to find probabilities and quantiles for normal distributions.
+
+## Question 1
+It is known that SAT scores for the 2021-2022 academic year were approximately normal, with a mean of 1050 and a standard deviation of 216 points. 
+
+What is the probability that a randomly selected SAT test taker in the 2021-2022 year scored 1400 or higher?
+
+# Question 1 answer
+
+```{r question1, error = T}
+# Use this code chunk to calculate the probability that a randomly selected 
+# SAT test taker in the 2021-2022 year scored 1400 or higher. Do not start 
+# your code on this line, and do not start your code with # (this is a 
+# comment, R will ignore it).
+
+pnorm(q = 1400, mean = 1050, sd = 216, lower.tail = FALSE)
+
+
+
+```
+
+The probability that a randomly selected SAT test-taker in the 2021-22 year scored 1400 or higher is 0.053.
+
+## Question 2
+It is known that SAT scores for the 2021-2022 academic year were approximately normal, with a mean of 1050 and a standard deviation of 216 points. 
+
+What score would an SAT test taker in the 2021-2022 year need to get in order to be in top 5% of SAT scores?
+
+```{r question2, error = T}
+# Use this code chunk to find the score that an SAT test taker in the
+# 2021-2022 year would need to get in order to be in top 5% of SAT scores
+# Do not start your code on this line, and do not start your code with #
+# (this is a comment, R will ignore it).
+
+qnorm(p = 0.95, mean = 1050, sd = 216, lower.tail = TRUE)
+
+# OR
+
+qnorm(p = 0.05, mean = 1050, sd = 216, lower.tail = FALSE)
+
+```
+
+To be in the top 5% of SAT scores in the 2021-22 year, an SAT test taker would need to score 1405.288 or more.
+
+## Question 3
+Arsenic is a compound that occurs naturally in very low concentrations. Arsenic blood concentrations in healthy adults have a normal distribution with mean 3.2 micrograms per deciliter ($\mu$g/dl) and standard deviation 1.5 $\mu$g/dl. 
+
+What is the probability that a healthy adult will have an arsenic blood concentration between 2.5 and 5 micrograms per deciliter? 
+
+```{r question3, error = T}
+# Use this code chunk to find the probability that a healthy adult will 
+# have an arsenic blood concentration between 2.5 and 5 micrograms per 
+# deciliter. # Do not start your code on this line, and do not start your 
+# code with # (this is a comment, R will ignore it).
+
+pnorm(q = 5, mean = 3.2, sd = 1.5, lower.tail = TRUE) - 
+  pnorm(q = 2.5, mean = 3.2, sd = 1.5, lower.tail = TRUE)
+
+
+```
+
+The probability that a healthy adult will have an arsenic blood concentration between 2.5 and 5 micrograms per deciliter is 0.565.
+
+## Question 4
+Arsenic is a compound that occurs naturally in very low concentrations. Arsenic blood concentrations in healthy adults have a normal distribution with mean 3.2 micrograms per deciliter ($\mu$g/dl) and standard deviation 1.5 $\mu$g/dl. 
+
+What is the range of arsenic blood concentrations for the middle 50% of healthy adults? 
+
+```{r question4, error = T}
+# Use this code chunk to find the range of arsenic blood concentrations 
+# for the middle 50% of healthy adults. 
+# Do not start your code on this line, and do not start your code with #
+# (this is a comment, R will ignore it).
+
+upperbound <- qnorm(p = 0.75, mean = 3.2, sd = 1.5, lower.tail = TRUE)
+lowerbound <- qnorm(p = 0.25, mean = 3.2, sd = 1.5, lower.tail = TRUE)
+upperbound
+lowerbound
+
+```
+
+The range of arsenic blood concentrations for the middle 50% of healthy adults is from 2.188 to 4.212 micrograms per deciliter.
