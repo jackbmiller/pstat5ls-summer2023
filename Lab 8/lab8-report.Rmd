@@ -1,0 +1,85 @@
+---
+title: "PSTAT 5LS Lab 8 Report"
+author: "YOUR NAME GOES HERE - KEEP THE QUOTES"
+date: "TODAY'S DATE GOES HERE - KEEP THE QUOTES"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Introduction
+
+This week, we'll be using a random sample of 300 entries from this [data set](https://github.com/rfordatascience/tidytuesday/blob/master/data/2020/2020-07-07/readme.md) from the Coffee Quality Database collected from the Coffee Quality Institute's [review pages](https://database.coffeeinstitute.org/) in January 2018 by BuzzFeed data scientist [James Ledoux](https://github.com/jldbc/coffee-quality-database). Members of the Coffee Quality Institute tasted and recorded their feedback for the coffee. The data are available to you in `coffee_sample.csv`. 
+
+You might find useful the below descriptions of *some* of the variables (from <https://www.coffeereview.com/interpret-coffee/>)
+
+- **Aroma** refers to smell: "How intense and pleasurable is the aroma when the nose first descends over the cup and is enveloped by fragrance?"
+- **Acidity** "is the bright, dry sensation that enlivens the taste of coffee"
+- **Balance** "appears to mean that no one quality overwhelms all others, but there is enough complexity in the coffee to arouse interest."
+- "**Body** and mouthfeel describe sensations of weight and texture. Body can be light and delicate, heavy and resonant, thin and disappointing; in texture it can be silky, plush, syrupy, lean or thin.
+- "**Flavor** and **aftertaste** include everything not suitably described under the categories aroma, acidity and body.
+- **Clean cup** is referring to the absence of non-coffee tastes or aromas in the cup.
+- **Cupper points** are an individual rater's holistic perception of the cup.
+- **Total cup points** is the sum of the ratings for flavor, aroma, aftertaste, acidity, body, balance, uniformity, sweetness, "clean cup", and cupper points.
+
+Here's some more information about coffee tasting that you might find interesting: <https://www.coffeeiq.co/en/a-look-at-coffee-tasting/>. 
+
+## Question 0
+First, you need to read in the data set. 
+
+```{r readData, error = T}
+# Run this code chunk to read in the data
+coffee <- read.csv("coffee_sample.csv", stringsAsFactors = TRUE)
+```
+
+## Question 1
+Let's determine which of the variables body, acidity, or balance is the best predictor of a coffee's total cup points. To do so, we should look at the correlation between these variables and total cup points.
+
+```{r subsetData, error = T}
+# Run this chunk to subset the data set
+coffee_subset <- subset(coffee, select = c("body", "acidity", "balance", "total_cup_points"))
+```
+
+```{r correlations, error = T}
+# Use this chunk to write and run code to find the correlations
+cor(coffee_subset)
+```
+
+Which of the variables body, acidity, or balance is the best predictor of a coffee's total cup points? Why?
+
+*replace this text with your answer*
+
+
+## Question 2
+
+Create a scatterplot between the using the variable you chose in Question 1 (to best predict total cup points) and total cup points. 
+
+```{r scatterplot, error = T}
+plot(total_cup_points ~ balance,
+     data = coffee_subset,
+     main = "Scatterplot of Coffee Total Cup Points by Balance",
+     xlab = "Balance Rating",
+     ylab = "Total Cup Points")
+
+```
+
+Describe the relationship between the two variables (in terms of the overall form, the direction of the association, the strength of the association, and if there are any outliers or other unusual features).
+
+*replace this text with your answer*
+
+
+## Question 3
+Find the equation of the regression line to model the relationship between total cup points and your variable from Question 1. 
+
+```{r coffeeModel, error = T}
+coffee_mod <- lm(total_cup_points ~ balance, data = coffee_subset)
+summary(coffee_mod)
+```
+
+What is the equation of the regression line? Be sure to include context
+
+*replace this text with your answer*
+
+
